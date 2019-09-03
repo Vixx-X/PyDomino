@@ -3,7 +3,7 @@
 from itertools import combinations_with_replacement as comb
 fichas = list(comb([x for x in range(7)], 2))
 
-from random import shuffle, choice
+from random import shuffle
 
 def repartir(fichas):
     shuffle(fichas)
@@ -46,19 +46,19 @@ def turno(tab, f_jug):
 def ronda(tab, jug, init=False):
     if init:
         for i, j in jug:
-            if (6,6) in j:
+            if init and (6,6) in j:
                 j.remove((6,6))
                 tab.append((6,6))
-                init = True
+                init = False
                 yield tab, 0
-            elif turno(tab, j):
+            elif not init and turno(tab, j):
                 yield tab, 0
     else:
         for i, j in jug:
+            if turno(tab, j):
+                yield tab, 0
             if not j:
                 yield tab, i
-            elif turno(tab, j):
-                yield tab, 0
 
 def start(jug):
     tab = []
